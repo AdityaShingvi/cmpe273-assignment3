@@ -182,25 +182,25 @@ class WalletController {
 		
 		try{
 		println("Sending: " + key)
-		result = this.client.get(key)
+		result = this.client_cnt.get(key)
 		println("Received: " + result)
 	}
 	catch{
 		
 		case e : Exception => println("Exception: " + e)
 
-		var keyval = this.client.set(key, "0")
+		var keyval = this.client_cnt.set(key, "0")
 		flag = true
 		
 	}
 		
 		if(!flag)
 		{
-			var result = this.client.get(key)
+			var result = this.client_cnt.get(key)
 			var counter1 = result.toInt
 			var counter2 = counter1 + 1
-			var update = this.client.set(key, counter2.toString)
-			countValue =  this.client.get(key)
+			var update = this.client_cnt.set(key, counter2.toString)
+			countValue =  this.client_cnt.get(key)
  		}
 		
 
