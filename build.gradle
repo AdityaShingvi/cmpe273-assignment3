@@ -48,6 +48,7 @@ dependencies {
     compile("com.sun.jersey:jersey-server:1.14")
     compile("com.sun.jersey:jersey-grizzly2:1.14")
     compile("com.sun.jersey:jersey-core:1.14")
+    compile "net.floatingsun:jetcd:0.2.0"
 }
 
 task wrapper(type: Wrapper) {
