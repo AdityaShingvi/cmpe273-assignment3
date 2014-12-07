@@ -17,8 +17,11 @@ import org.springframework.validation.BindingResult
 import org.joda.time.DateTime
 import org.springframework.http.{HttpHeaders, ResponseEntity}
 import javax.ws.rs.core._
-import jetcd._
+//import jetcd._
 import java.net._
+import com.justinsb.etcd.EtcdClientException
+import com.justinsb.etcd.EtcdResult
+import com.justinsb.etcd.EtcdClient
 
 @RestController
 @Configuration
@@ -29,7 +32,7 @@ class WalletController {
   var cnt1 = 0
   var  user = new User();
   var map_usr : Map[String, User] = Map();
-  var client_cnt: EtcdClient = EtcdClientFactory.newInstance("http://127.0.0.1:4001/")
+  val client_cnt: EtcdClient = new EtcdClient(URI.create("http://54.183.162.215:4001/"))
   
   @RequestMapping(value = Array("/api/V1/users"), method = Array(RequestMethod.POST), headers = Array("content-type=application/json"), consumes = Array("application/json"))
   def userCreation(@Valid @RequestBody user : User, result: BindingResult):User = {
@@ -172,7 +175,7 @@ class WalletController {
      map_usr += (userId -> map_u10)
    }
    
-   @RequestMapping(value=Array("/api/V1/users/counter"), method=Array(RequestMethod.GET))
+   /*@RequestMapping(value=Array("/api/V1/users/counter"), method=Array(RequestMethod.GET))
 	@ResponseBody
    def counter( ): String={
     var countValue =""
@@ -207,7 +210,28 @@ class WalletController {
 	return countValue
 
    
-   }
+   }*/
+
+
+   @RequestMapping(value=Array("/api/V1/users/counter"), method=Array(RequestMethod.GET))
+   @ResponseBody
+   def counter( ): String={
+		var key = "/009994127/counter"
+		var result : EtcdResult = null
+		try{
+			result = this.client_cnt.get(key)
+		}
+		catch{
+			case e : Exception => println("Exception: " + e)
+			result = this.client_cnt.set(key, "0")		
+		}
+		result = this.client_cnt.get(key)
+		var intCount = result.node.value.toInt
+		var finalCount = intCount + 1
+		var update = this.client_cnt.set(key, finalCount.toString)
+		result = this.client_cnt.get(key)
+		return result.node.value
+  }
    
 }
    

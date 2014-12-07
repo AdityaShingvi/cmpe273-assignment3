@@ -49,6 +49,7 @@ dependencies {
     compile("com.sun.jersey:jersey-grizzly2:1.14")
     compile("com.sun.jersey:jersey-core:1.14")
     compile "net.floatingsun:jetcd:0.2.0"
+    compile "com.github.mlaccetti:etcd-client:0.1.2"
 }
 
 task wrapper(type: Wrapper) {
